@@ -40,9 +40,13 @@ const LaunchToken = () => {
   };
   
   const handleSelectWallet = () => {
-    toast.success('Wallet connected successfully');
+    toast.success('Continue to next step to launch token.');
     setCurrentStep(2);
   };
+
+  const handleGenerateCA = () => {
+    
+  }
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,7 +92,7 @@ const LaunchToken = () => {
           <Card className="shadow-soft overflow-hidden">
             <CardHeader className="bg-accent/50 border-b px-6 py-4">
               <CardTitle className="flex items-center justify-between">
-                <span>{currentStep === 1 ? 'Connect Wallet' : currentStep === 2 ? 'Token Details' : 'Launch Token'}</span>
+                <span>{currentStep === 1 ? 'Launch Token' : currentStep === 2 ? 'Token Details' : 'Launch Token'}</span>
                 <div className="text-sm font-normal text-muted-foreground">Step {currentStep} of 3</div>
               </CardTitle>
             </CardHeader>
@@ -103,12 +107,12 @@ const LaunchToken = () => {
                       <path d="M18 12a2 2 0 0 0 0 4h4v-4Z" />
                     </svg>
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">Connect Your Wallet</h3>
+                  <h3 className="text-xl font-semibold mb-2">Launch Your Token</h3>
                   <p className="text-muted-foreground text-center max-w-md mb-8">
-                    Connect your wallet to create and manage your custom token on the blockchain.
+                    Click the below button to create and manage your custom token on the pump.fun.
                   </p>
                   <Button onClick={handleSelectWallet} className="rounded-full">
-                    Select Wallet
+                    Click Me to Continue
                   </Button>
                 </div>
               ) : currentStep === 2 ? (
@@ -157,22 +161,7 @@ const LaunchToken = () => {
                       onFileChange={handleFileChange}
                     />
                     
-                    <div className="w-full space-y-2">
-                      <label className="text-sm font-medium text-foreground">
-                        Keypair Type
-                      </label>
-                      <select 
-                        name="keypairType"
-                        className="w-full px-3 py-2 bg-white border border-input rounded-md transition-all duration-200"
-                        value={formData.keypairType}
-                        onChange={(e) => setFormData({ ...formData, keypairType: e.target.value })}
-                      >
-                        <option>Grinded Keypair</option>
-                        <option>Custom Keypair</option>
-                      </select>
-                    </div>
-                    
-                    <div className="w-full space-y-2">
+                    {/* <div className="w-full space-y-2">
                       <label className="text-sm font-medium text-foreground">
                         Private Key
                       </label>
@@ -187,7 +176,41 @@ const LaunchToken = () => {
                       <p className="text-xs text-muted-foreground">
                         Don't have a grinded keypair? <a href="#" className="text-primary hover:underline">Go to Grind Keypair tab</a>
                       </p>
+                    </div> */}
+
+                    <div className="w-full space-y-2">
+                      <Button
+                        className='w-full'
+                        onClick={handleSubmit}
+                      >
+                        Generate New CA
+                      </Button>
                     </div>
+
+                    <div className="w-full space-y-2">
+                      <input
+                        type="text"
+                        name="initialBuyAmount"
+                        value={"Your CA : " + formData.initialBuyAmount}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 bg-white border border-input rounded-md"
+                      />
+                    </div>
+
+                    {/* <div className="w-full space-y-2">
+                      <label className="text-sm font-medium text-foreground">
+                        Keypair Type
+                      </label>
+                      <select 
+                        name="keypairType"
+                        className="w-full px-3 py-2 bg-white border border-input rounded-md transition-all duration-200"
+                        value={formData.keypairType}
+                        onChange={(e) => setFormData({ ...formData, keypairType: e.target.value })}
+                      >
+                        <option>Grinded Keypair</option>
+                        <option>Custom Keypair</option>
+                      </select>
+                    </div> */}
                     
                     <div className="w-full space-y-2">
                       <label className="text-sm font-medium text-foreground">Initial Buy Amount (SOL)</label>

@@ -58,8 +58,8 @@ const Header = () => {
     >
       <div className="container max-w-6xl mx-auto flex items-center justify-between">
         <NavLink to="/" className="font-semibold text-lg flex items-center">
-          <span className="bg-primary text-white w-8 h-8 rounded-full flex items-center justify-center mr-2">MG</span>
-          <span>Minty Girl</span>
+          <span className="bg-primary text-white w-8 h-8 rounded-full flex items-center justify-center mr-2">PTF</span>
+          <span>PumpFun Token Launcher</span>
         </NavLink>
         
         <nav className="hidden md:flex space-x-1">
@@ -68,11 +68,11 @@ const Header = () => {
           <NavItem to="/marketplace">Marketplace</NavItem>
         </nav>
         
-        <div className="flex items-center space-x-4">
+        {/* <div className="flex items-center space-x-4">
           <button className="px-4 py-2 text-sm font-medium text-primary bg-accent rounded-full hover:bg-accent/70 transition-colors">
             Connect Wallet
           </button>
-        </div>
+        </div> */}
       </div>
     </header>
   );

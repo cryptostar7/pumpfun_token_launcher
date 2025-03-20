@@ -94,7 +94,7 @@ const Index = () => {
                 
                 <div className="absolute inset-0 flex items-center justify-center">
                   <img 
-                    src="/lovable-uploads/b5d5b77e-4d2a-4f9b-ab4e-4fcb52a10acf.png"
+                    src="/brand/b5d5b77e-4d2a-4f9b-ab4e-4fcb52a10acf.png"
                     alt="Minty Girl" 
                     className="w-52 h-52 md:w-64 md:h-64 object-cover rounded-full border-4 border-white shadow-lg animate-float"
                   />
