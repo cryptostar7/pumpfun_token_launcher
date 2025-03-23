@@ -6,14 +6,17 @@ import { Button } from '@/components/UI/button';
 import { Input } from '@/components/UI/input';
 import FileUpload from '@/components/UI/FileUpload';
 import { toast } from 'sonner';
+import { generateCA } from '@/lib/generateCA';
 
 type FormData = {
   name: string;
   symbol: string;
   description: string;
   media: File | null;
-  keypairType: string;
   privateKey: string;
+  twitter: string;
+  telegram: string;
+  website: string;
   initialBuyAmount: string;
 };
 
@@ -23,12 +26,15 @@ const LaunchToken = () => {
     symbol: '',
     description: '',
     media: null,
-    keypairType: 'Grinded Keypair',
     privateKey: '',
-    initialBuyAmount: '3 SOL',
+    twitter: '',
+    telegram: '',
+    website: '',
+    initialBuyAmount: '',
   });
   
   const [currentStep, setCurrentStep] = useState(1);
+  const [showSocial, setShowSocial] = useState(false);
   
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -44,19 +50,26 @@ const LaunchToken = () => {
     setCurrentStep(2);
   };
 
-  const handleGenerateCA = () => {
-    
+  const handleGenerateCA = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast.success('Generate CA is clicked.');
+    generateCA(formData);
+  }
+
+  const handleAddSocialLink = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setShowSocial(!showSocial);
   }
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast.success('Token launch initiated! Your token will be live soon.');
+    generateCA(formData);
   };
   
   return (
     <div className="min-h-screen">
       <Header />
-      
       <div className="pt-32 pb-20 px-4">
         <div className="container max-w-4xl mx-auto">
           <div className="text-center mb-12">
@@ -160,64 +173,82 @@ const LaunchToken = () => {
                       label="Token Media"
                       onFileChange={handleFileChange}
                     />
-                    
-                    {/* <div className="w-full space-y-2">
+
+                    <div className="w-full space-y-2">
                       <label className="text-sm font-medium text-foreground">
-                        Private Key
+                        Your Private Key
                       </label>
-                      <textarea
+                      <input
+                        type="text"
                         name="privateKey"
-                        rows={3}
-                        className="w-full px-3 py-2 bg-white border border-input rounded-md transition-all duration-200 placeholder:text-muted-foreground focus:ring-2 focus:ring-primary/30"
-                        placeholder="Enter grinded private key..."
+                        placeholder='Enter Your Private Key'
                         value={formData.privateKey}
                         onChange={handleInputChange}
+                        className="w-full px-3 py-2 bg-white border border-input rounded-md"
                       />
-                      <p className="text-xs text-muted-foreground">
-                        Don't have a grinded keypair? <a href="#" className="text-primary hover:underline">Go to Grind Keypair tab</a>
-                      </p>
-                    </div> */}
-
+                    </div>
+                    
                     <div className="w-full space-y-2">
                       <Button
                         className='w-full'
-                        onClick={handleSubmit}
+                        onClick={handleAddSocialLink}
                       >
-                        Generate New CA
+                        {showSocial? 'Hide Social Link' : 'Add Social Link'}
                       </Button>
                     </div>
 
                     <div className="w-full space-y-2">
+                      <label className="text-sm font-medium text-foreground" hidden={!showSocial}>
+                        Twitter URL
+                      </label>
                       <input
                         type="text"
-                        name="initialBuyAmount"
-                        value={"Your CA : " + formData.initialBuyAmount}
+                        name="twitter"
+                        placeholder='https://twitter.com/yourhandle'
+                        value={formData.twitter}
+                        hidden={!showSocial}
                         onChange={handleInputChange}
                         className="w-full px-3 py-2 bg-white border border-input rounded-md"
                       />
                     </div>
 
-                    {/* <div className="w-full space-y-2">
-                      <label className="text-sm font-medium text-foreground">
-                        Keypair Type
+                    <div className="w-full space-y-2">
+                      <label className="text-sm font-medium text-foreground" hidden={!showSocial}>
+                        Telegram URL
                       </label>
-                      <select 
-                        name="keypairType"
-                        className="w-full px-3 py-2 bg-white border border-input rounded-md transition-all duration-200"
-                        value={formData.keypairType}
-                        onChange={(e) => setFormData({ ...formData, keypairType: e.target.value })}
-                      >
-                        <option>Grinded Keypair</option>
-                        <option>Custom Keypair</option>
-                      </select>
-                    </div> */}
-                    
+                      <input
+                        type="text"
+                        name="telegram"
+                        placeholder='https://t.me/yourhandle'
+                        value={formData.telegram}
+                        hidden={!showSocial}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 bg-white border border-input rounded-md"
+                      />
+                    </div>
+
+                    <div className="w-full space-y-2">
+                      <label className="text-sm font-medium text-foreground" hidden={!showSocial}>
+                        Website URL
+                      </label>
+                      <input
+                        type="text"
+                        name="website"
+                        placeholder='https://yourwebsite.com'
+                        value={formData.website}
+                        hidden={!showSocial}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 bg-white border border-input rounded-md"
+                      />
+                    </div>
+
                     <div className="w-full space-y-2">
                       <label className="text-sm font-medium text-foreground">Initial Buy Amount (SOL)</label>
                       <input
                         type="text"
                         name="initialBuyAmount"
                         value={formData.initialBuyAmount}
+                        placeholder='Enter your initial buy amount'
                         onChange={handleInputChange}
                         className="w-full px-3 py-2 bg-white border border-input rounded-md"
                       />
