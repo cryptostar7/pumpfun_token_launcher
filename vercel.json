@@ -1,7 +1,34 @@
 {
+  "version": 2,
+  "builds": [
+    {
+      "src": "backend/index.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "src/**/*.{js,jsx,ts,tsx}",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "public"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "backend/index.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/$1"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  },
   "functions": {
-    "backend/index.js": {
-      "runtime": "nodejs@18.x"
+    "backend/**/*.js": {
+      "runtime": "nodejs18.x"
     }
   }
 }
