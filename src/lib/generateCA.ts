@@ -6,18 +6,13 @@ import axios from 'axios';
 
 export async function generateCA(form: any) {
     console.log("Form", form);
-    // const RPC_ENDPOINT = import.meta.env.VITE_RPC_URL;
-    // const web3Connection = new Connection(
-    //     RPC_ENDPOINT,
-    //     'confirmed',
-    // );
+    const RPC_ENDPOINT = import.meta.env.VITE_RPC_URL;
+    const web3Connection = new Connection(
+        RPC_ENDPOINT,
+        'confirmed',
+    );
 
-    // const privateKey = form.privateKey;
-
-    // const signerKeyPair = Keypair.fromSecretKey(bs58.decode(privateKey));
-
-    // // Generate a random keypair for token
-    // const mintKeypair = Keypair.generate(); 
+    const privateKey = form.privateKey;
 
     // Define token metadata
     const formData = new FormData();
@@ -29,44 +24,11 @@ export async function generateCA(form: any) {
     formData.append("telegram", form.telegram);
     formData.append("website", form.website);
     formData.append("showName", "true");
-    formData.append("privateKey", form.privateKey);
+    formData.append("privateKey", privateKey);
     formData.append("initialBuyAmount", form.initialBuyAmount);
 
-    // Create IPFS metadata storage
-    const metadataResponse = await axios.post('http://localhost:3000/createToken', formData);
-    console.log("Metadata Response Json", metadataResponse);
+    // // Create IPFS metadata storage
+    // const metadataResponse = await axios.post('http://localhost:3000/createToken', formData);
+    // console.log("Metadata Response Json", metadataResponse);
 
-    // // Get the create transaction
-    // const response = await fetch(`https://pumpportal.fun/api/trade-local`, {
-    //     method: "POST",
-    //     headers: {
-    //         "Content-Type": "application/json"
-    //     },
-    //     body: JSON.stringify({
-    //         "publicKey": 'your-wallet-public-key',
-    //         "action": "create",
-    //         "tokenMetadata": {
-    //             name: metadataResponseJSON.metadata.name,
-    //             symbol: metadataResponseJSON.metadata.symbol,
-    //             uri: metadataResponseJSON.metadataUri
-    //         },
-    //         "mint": mintKeypair.publicKey.toBase58(),
-    //         "denominatedInSol": "true",
-    //         "amount": 1, // dev buy of 1 SOL
-    //         "slippage": 10, 
-    //         "priorityFee": 0.0005,
-    //         "pool": "pump"
-    //     })
-    // });
-    // if(response.status === 200){ // successfully generated transaction
-    //     const data = await response.arrayBuffer();
-    //     const tx = VersionedTransaction.deserialize(new Uint8Array(data));
-    //     tx.sign([mintKeypair, signerKeyPair]);
-    //     const signature = await web3Connection.sendTransaction(tx)
-    //     console.log("Transaction: https://solscan.io/tx/" + signature);
-    // } else {
-    //     console.log(response.statusText); // log error
-    // }
 }
-
-// sendLocalCreateTx();

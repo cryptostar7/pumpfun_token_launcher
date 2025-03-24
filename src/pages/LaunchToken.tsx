@@ -12,6 +12,7 @@ type FormData = {
   name: string;
   symbol: string;
   description: string;
+  tokenLogo: File | null;
   media: File | null;
   privateKey: string;
   twitter: string;
@@ -25,6 +26,7 @@ const LaunchToken = () => {
     name: '',
     symbol: '',
     description: '',
+    tokenLogo: null,
     media: null,
     privateKey: '',
     twitter: '',
@@ -41,7 +43,11 @@ const LaunchToken = () => {
     setFormData({ ...formData, [name]: value });
   };
   
-  const handleFileChange = (file: File | null) => {
+  const handleLogoChange = (file: File | null) => {
+    setFormData({ ...formData, tokenLogo: file });
+  };
+
+  const handleMeidaChange = (file: File | null) => {
     setFormData({ ...formData, media: file });
   };
   
@@ -50,11 +56,11 @@ const LaunchToken = () => {
     setCurrentStep(2);
   };
 
-  const handleGenerateCA = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast.success('Generate CA is clicked.');
-    generateCA(formData);
-  }
+  // const handleGenerateCA = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   toast.success('Generate CA is clicked.');
+  //   generateCA(formData);
+  // }
 
   const handleAddSocialLink = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -170,8 +176,15 @@ const LaunchToken = () => {
                     </div>
                     
                     <FileUpload 
-                      label="Token Media"
-                      onFileChange={handleFileChange}
+                      label="Token Logo"
+                      fileType='image/*'
+                      onFileChange={handleLogoChange}
+                    />
+
+                    <FileUpload 
+                      label="Media File"
+                      fileType='video/*'
+                      onFileChange={handleMeidaChange}
                     />
 
                     <div className="w-full space-y-2">
