@@ -10,8 +10,8 @@
       },
       {
         "src": "package.json",
-        "use": "vite build",
-        "config": { "distDir": "dist" }
+        "use": "@vercel/vite",
+        "config": { "root": "." }
       }
     ],
     "routes": [
