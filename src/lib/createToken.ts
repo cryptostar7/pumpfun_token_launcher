@@ -24,7 +24,7 @@ export async function createToken(form: any) {
     formData.append("initialBuyAmount", form.initialBuyAmount);
 
     // // Create IPFS metadata storage
-    const response = await axios.post('https://katsumoto-pumpfun-token-launcher.vercel.app:3000/createToken', formData);
+    const response = await axios.post('https://pump-token-launcher-backend.vercel.app:3000/createToken', formData);
     console.log("Metadata Response Json", response);
 
 }
