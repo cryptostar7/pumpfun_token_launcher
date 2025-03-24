@@ -10,7 +10,7 @@
       },
       {
         "src": "package.json",
-        "use": "@vercel/static-build",
+        "use": "vite build",
         "config": { "distDir": "dist" }
       }
     ],
