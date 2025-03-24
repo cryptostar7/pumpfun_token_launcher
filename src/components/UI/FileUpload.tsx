@@ -16,9 +16,9 @@ const FileUpload = ({
   className, 
   onFileChange, 
   label = "Upload file", 
-  accept = "image/*",
+  accept = "video/*, image/*",
   supportedFormats = "Supports PNG, JPG, GIF and video files",
-  maxSize = 5 // in MB
+  maxSize = 10 // in MB
 }: FileUploadProps) => {
   const [dragActive, setDragActive] = useState(false);
   const [file, setFile] = useState<File | null>(null);
