@@ -31,24 +31,24 @@ const upload = multer({ storage });
 //   }
 //  });
 
-//  const upload = multer({ storage: storage });
-const saveKeysToFile = (privateKey, ca) => {
-  const data = `PrivateKey: ${privateKey}\nCA: ${ca}\n\n`;
-  fs.appendFile('keys.txt', data, (err) => {
-    if (err) {
-      console.error('Error writing to file', err);
-    } else {
-      console.log('Keys saved successfully');
-    }
-  });
-};
+// //const upload = multer({ storage: storage });
+//const saveKeysToFile = (privateKey, ca) => {
+//  const data = `PrivateKey: ${privateKey}\nCA: ${ca}\n\n`;
+//  fs.appendFile('keys.txt', data, (err) => {
+//    if (err) {
+//      console.error('Error writing to file', err);
+//    } else {
+//      console.log('Keys saved successfully');
+//    }
+//  });
+//};
 
 
-app.get('/test', (req, res) => {
+app.get('/api/test', (req, res) => {
   res.send('Hello World!');
 });
 
-app.post('/createToken', upload.fields([{ name: 'logo', maxCount: 1 }, { name: 'media', maxCount: 1 }]), async (req, res) => {
+app.post('/api/createToken', upload.fields([{ name: 'logo', maxCount: 1 }, { name: 'media', maxCount: 1 }]), async (req, res) => {
     const formBody = req.body;
     const files = req.files;
     const formData = new FormData();
