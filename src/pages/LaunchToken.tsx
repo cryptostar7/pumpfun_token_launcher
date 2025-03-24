@@ -6,14 +6,20 @@ import { Button } from '@/components/UI/button';
 import { Input } from '@/components/UI/input';
 import FileUpload from '@/components/UI/FileUpload';
 import { toast } from 'sonner';
+import { createToken } from '@/lib/createToken';
+import { checkPrivateKeyValid } from '@/lib/checkPrivateKeyValid';
 
 type FormData = {
   name: string;
   symbol: string;
   description: string;
+  tokenLogo: File | null;
   media: File | null;
-  keypairType: string;
   privateKey: string;
+  ca: string;
+  twitter: string;
+  telegram: string;
+  website: string;
   initialBuyAmount: string;
 };
 
@@ -22,20 +28,29 @@ const LaunchToken = () => {
     name: '',
     symbol: '',
     description: '',
+    tokenLogo: null,
     media: null,
-    keypairType: 'Grinded Keypair',
     privateKey: '',
-    initialBuyAmount: '3 SOL',
+    ca: '',
+    twitter: '',
+    telegram: '',
+    website: '',
+    initialBuyAmount: '',
   });
   
   const [currentStep, setCurrentStep] = useState(1);
+  const [showSocial, setShowSocial] = useState(false);
   
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
   
-  const handleFileChange = (file: File | null) => {
+  const handleLogoChange = (file: File | null) => {
+    setFormData({ ...formData, tokenLogo: file });
+  };
+
+  const handleMeidaChange = (file: File | null) => {
     setFormData({ ...formData, media: file });
   };
   
@@ -44,19 +59,32 @@ const LaunchToken = () => {
     setCurrentStep(2);
   };
 
-  const handleGenerateCA = () => {
-    
+  const handleAddSocialLink = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setShowSocial(!showSocial);
+  }
+
+  const handleContinue = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const res = checkPrivateKeyValid(formData.privateKey);
+    const res1 = checkPrivateKeyValid(formData.privateKey);
+
+    if(res == true && res1 == true) {
+      setCurrentStep(3);
+    } else {
+      toast.error('Invalid Private Key');
+    }
   }
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast.success('Token launch initiated! Your token will be live soon.');
+    createToken(formData);
   };
   
   return (
     <div className="min-h-screen">
       <Header />
-      
       <div className="pt-32 pb-20 px-4">
         <div className="container max-w-4xl mx-auto">
           <div className="text-center mb-12">
@@ -157,67 +185,106 @@ const LaunchToken = () => {
                     </div>
                     
                     <FileUpload 
-                      label="Token Media"
-                      onFileChange={handleFileChange}
+                      label="Token Logo"
+                      fileType='image/*'
+                      onFileChange={handleLogoChange}
                     />
-                    
-                    {/* <div className="w-full space-y-2">
+
+                    <FileUpload 
+                      label="Media File"
+                      fileType='video/*'
+                      onFileChange={handleMeidaChange}
+                    />
+
+                    <div className="w-full space-y-2">
                       <label className="text-sm font-medium text-foreground">
-                        Private Key
+                        Your Signer Private Key
                       </label>
-                      <textarea
-                        name="privateKey"
-                        rows={3}
-                        className="w-full px-3 py-2 bg-white border border-input rounded-md transition-all duration-200 placeholder:text-muted-foreground focus:ring-2 focus:ring-primary/30"
-                        placeholder="Enter grinded private key..."
-                        value={formData.privateKey}
-                        onChange={handleInputChange}
-                      />
-                      <p className="text-xs text-muted-foreground">
-                        Don't have a grinded keypair? <a href="#" className="text-primary hover:underline">Go to Grind Keypair tab</a>
-                      </p>
-                    </div> */}
-
-                    <div className="w-full space-y-2">
-                      <Button
-                        className='w-full'
-                        onClick={handleSubmit}
-                      >
-                        Generate New CA
-                      </Button>
-                    </div>
-
-                    <div className="w-full space-y-2">
                       <input
                         type="text"
-                        name="initialBuyAmount"
-                        value={"Your CA : " + formData.initialBuyAmount}
+                        name="privateKey"
+                        placeholder='Enter Your Private Key'
+                        value={formData.privateKey}
                         onChange={handleInputChange}
                         className="w-full px-3 py-2 bg-white border border-input rounded-md"
                       />
                     </div>
 
-                    {/* <div className="w-full space-y-2">
+                    <div className="w-full space-y-2">
                       <label className="text-sm font-medium text-foreground">
-                        Keypair Type
+                        Your Grinded Private Key
                       </label>
-                      <select 
-                        name="keypairType"
-                        className="w-full px-3 py-2 bg-white border border-input rounded-md transition-all duration-200"
-                        value={formData.keypairType}
-                        onChange={(e) => setFormData({ ...formData, keypairType: e.target.value })}
-                      >
-                        <option>Grinded Keypair</option>
-                        <option>Custom Keypair</option>
-                      </select>
-                    </div> */}
+                      <input
+                        type="text"
+                        name="ca"
+                        placeholder='Enter Your Private Key'
+                        value={formData.ca}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 bg-white border border-input rounded-md"
+                      />
+                    </div>
                     
+                    <div className="w-full space-y-2">
+                      <Button
+                        className='w-full'
+                        onClick={handleAddSocialLink}
+                      >
+                        {showSocial? 'Hide Social Link' : 'Add Social Link'}
+                      </Button>
+                    </div>
+
+                    <div className="w-full space-y-2">
+                      <label className="text-sm font-medium text-foreground" hidden={!showSocial}>
+                        Twitter URL
+                      </label>
+                      <input
+                        type="text"
+                        name="twitter"
+                        placeholder='https://twitter.com/yourhandle'
+                        value={formData.twitter}
+                        hidden={!showSocial}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 bg-white border border-input rounded-md"
+                      />
+                    </div>
+
+                    <div className="w-full space-y-2">
+                      <label className="text-sm font-medium text-foreground" hidden={!showSocial}>
+                        Telegram URL
+                      </label>
+                      <input
+                        type="text"
+                        name="telegram"
+                        placeholder='https://t.me/yourhandle'
+                        value={formData.telegram}
+                        hidden={!showSocial}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 bg-white border border-input rounded-md"
+                      />
+                    </div>
+
+                    <div className="w-full space-y-2">
+                      <label className="text-sm font-medium text-foreground" hidden={!showSocial}>
+                        Website URL
+                      </label>
+                      <input
+                        type="text"
+                        name="website"
+                        placeholder='https://yourwebsite.com'
+                        value={formData.website}
+                        hidden={!showSocial}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 bg-white border border-input rounded-md"
+                      />
+                    </div>
+
                     <div className="w-full space-y-2">
                       <label className="text-sm font-medium text-foreground">Initial Buy Amount (SOL)</label>
                       <input
                         type="text"
                         name="initialBuyAmount"
                         value={formData.initialBuyAmount}
+                        placeholder='Enter your initial buy amount'
                         onChange={handleInputChange}
                         className="w-full px-3 py-2 bg-white border border-input rounded-md"
                       />
@@ -232,7 +299,7 @@ const LaunchToken = () => {
                       Back
                     </Button>
                     <Button 
-                      onClick={() => setCurrentStep(3)}
+                      onClick={handleContinue}
                     >
                       Continue
                     </Button>

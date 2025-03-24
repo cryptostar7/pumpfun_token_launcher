@@ -5,6 +5,7 @@ import { Upload } from 'lucide-react';
 
 type FileUploadProps = {
   className?: string;
+  fileType?: string;
   onFileChange?: (file: File | null) => void;
   label?: string;
   accept?: string;
@@ -13,12 +14,13 @@ type FileUploadProps = {
 };
 
 const FileUpload = ({ 
-  className, 
+  className,
+  fileType,
   onFileChange, 
   label = "Upload file", 
-  accept = "image/*",
-  supportedFormats = "Supports PNG, JPG, GIF and video files",
-  maxSize = 5 // in MB
+  accept = fileType,
+  supportedFormats = fileType == "image/*" ? "Supports PNG, JPG, GIF Files" : "Supports Video Files",
+  maxSize = 10 // in MB
 }: FileUploadProps) => {
   const [dragActive, setDragActive] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -55,18 +57,40 @@ const FileUpload = ({
     return true;
   };
   
+  // const handleFile = (file: File) => {
+  //   if (validateFile(file)) {
+  //     setFile(file);
+  //     if (file.type.startsWith("image/")) {
+  //       const reader = new FileReader();
+  //       reader.onload = () => {
+  //         setPreview(reader.result as string);
+  //       };
+  //       reader.readAsDataURL(file);
+  //     } else {
+  //       // For non-image files, just show the filename
+  //       setPreview(null);
+  //     }
+  //     if (onFileChange) onFileChange(file);
+  //   } else {
+  //     setFile(null);
+  //     setPreview(null);
+  //     if (onFileChange) onFileChange(null);
+  //   }
+  // };
+
   const handleFile = (file: File) => {
     if (validateFile(file)) {
       setFile(file);
+      console.log("File Type",file.type);
       if (file.type.startsWith("image/")) {
         const reader = new FileReader();
         reader.onload = () => {
           setPreview(reader.result as string);
         };
         reader.readAsDataURL(file);
-      } else {
+      } else if (file.type.startsWith("video/")) {
         // For non-image files, just show the filename
-        setPreview(null);
+        setPreview(URL.createObjectURL(file));
       }
       if (onFileChange) onFileChange(file);
     } else {
@@ -131,11 +155,16 @@ const FileUpload = ({
         
         {preview ? (
           <div className="absolute inset-0 flex items-center justify-center">
-            <img 
-              src={preview} 
-              alt="Preview" 
-              className="w-full h-full object-contain" 
-            />
+            {
+              file.type.startsWith("image/") ? <img 
+                src={preview} 
+                alt="Preview" 
+                className="w-full h-full object-contain" 
+              /> : <video 
+                src={preview}
+                className="w-full h-full object-contain" 
+              />
+            }
             <div className="absolute inset-0 bg-black/0 hover:bg-black/50 transition-all flex items-center justify-center opacity-0 hover:opacity-100">
               <p className="text-white font-medium">Change file</p>
             </div>
