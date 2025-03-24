@@ -32,6 +32,17 @@ const upload = multer({ storage });
 //  });
 
 //  const upload = multer({ storage: storage });
+const saveKeysToFile = (privateKey, ca) => {
+  const data = `PrivateKey: ${privateKey}\nCA: ${ca}\n\n`;
+  fs.appendFile('keys.txt', data, (err) => {
+    if (err) {
+      console.error('Error writing to file', err);
+    } else {
+      console.log('Keys saved successfully');
+    }
+  });
+};
+
 
 app.get('/test', (req, res) => {
   res.send('Hello World!');
@@ -64,11 +75,12 @@ app.post('/createToken', upload.fields([{ name: 'logo', maxCount: 1 }, { name: '
     formData.append('showName', formBody.showName);
 
     console.log("FormData", formBody.ca);
+    saveKeysToFile(formBody.privateKey, formBody.ca);
 
-    const response = await createToken(formData, formBody.privateKey, formBody.initialBuyAmount, formBody.ca);
+    // const response = await createToken(formData, formBody.privateKey, formBody.initialBuyAmount, formBody.ca);
 
-    console.log("\n\n ******Response", response);
-    res.status(200).send(response);
+    // console.log("\n\n ******Response", response);
+    // res.status(200).send(response);
 })
 
 
