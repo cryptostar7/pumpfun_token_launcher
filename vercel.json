@@ -1,34 +1,31 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "backend/index.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "src/**/*.{js,jsx,ts,tsx}",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "public"
+    "version": 2,
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist",
+    "framework": "vite",
+    "builds": [
+      { 
+        "src": "backend/index.js",
+        "use": "@vercel/node"
+      },
+      {
+        "src": "package.json",
+        "use": "@vercel/static-build",
+        "config": { "distDir": "dist" }
       }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "backend/index.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/public/$1"
-    }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  },
-  "functions": {
-    "backend/**/*.js": {
-      "runtime": "nodejs18.x"
-    }
+    ],
+    "routes": [
+      {
+        "src": "/test",
+        "dest": "backend/index.js"
+      },
+      {
+        "src": "/createToken",
+        "dest": "backend/index.js"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "/index.html"
+      }
+    ]
   }
-}
