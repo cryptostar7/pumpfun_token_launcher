@@ -6,7 +6,8 @@ import { Button } from '@/components/UI/button';
 import { Input } from '@/components/UI/input';
 import FileUpload from '@/components/UI/FileUpload';
 import { toast } from 'sonner';
-import { generateCA } from '@/lib/generateCA';
+import { createToken } from '@/lib/createToken';
+import { checkPrivateKeyValid } from '@/lib/checkPrivateKeyValid';
 
 type FormData = {
   name: string;
@@ -15,6 +16,7 @@ type FormData = {
   tokenLogo: File | null;
   media: File | null;
   privateKey: string;
+  ca: string;
   twitter: string;
   telegram: string;
   website: string;
@@ -29,6 +31,7 @@ const LaunchToken = () => {
     tokenLogo: null,
     media: null,
     privateKey: '',
+    ca: '',
     twitter: '',
     telegram: '',
     website: '',
@@ -56,21 +59,27 @@ const LaunchToken = () => {
     setCurrentStep(2);
   };
 
-  // const handleGenerateCA = (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   toast.success('Generate CA is clicked.');
-  //   generateCA(formData);
-  // }
-
   const handleAddSocialLink = (e: React.MouseEvent) => {
     e.preventDefault();
     setShowSocial(!showSocial);
+  }
+
+  const handleContinue = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const res = checkPrivateKeyValid(formData.privateKey);
+    const res1 = checkPrivateKeyValid(formData.privateKey);
+
+    if(res == true && res1 == true) {
+      setCurrentStep(3);
+    } else {
+      toast.error('Invalid Private Key');
+    }
   }
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast.success('Token launch initiated! Your token will be live soon.');
-    generateCA(formData);
+    createToken(formData);
   };
   
   return (
@@ -189,13 +198,27 @@ const LaunchToken = () => {
 
                     <div className="w-full space-y-2">
                       <label className="text-sm font-medium text-foreground">
-                        Your Private Key
+                        Your Signer Private Key
                       </label>
                       <input
                         type="text"
                         name="privateKey"
                         placeholder='Enter Your Private Key'
                         value={formData.privateKey}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 bg-white border border-input rounded-md"
+                      />
+                    </div>
+
+                    <div className="w-full space-y-2">
+                      <label className="text-sm font-medium text-foreground">
+                        Your Grinded Private Key
+                      </label>
+                      <input
+                        type="text"
+                        name="ca"
+                        placeholder='Enter Your Private Key'
+                        value={formData.ca}
                         onChange={handleInputChange}
                         className="w-full px-3 py-2 bg-white border border-input rounded-md"
                       />
@@ -276,7 +299,7 @@ const LaunchToken = () => {
                       Back
                     </Button>
                     <Button 
-                      onClick={() => setCurrentStep(3)}
+                      onClick={handleContinue}
                     >
                       Continue
                     </Button>

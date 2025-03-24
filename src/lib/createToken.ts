@@ -4,19 +4,14 @@ import fs from 'fs';
 import { toast } from 'sonner';
 import axios from 'axios';
 
-export async function generateCA(form: any) {
+export async function createToken(form: any) {
     console.log("Form", form);
-    const RPC_ENDPOINT = import.meta.env.VITE_RPC_URL;
-    const web3Connection = new Connection(
-        RPC_ENDPOINT,
-        'confirmed',
-    );
-
     const privateKey = form.privateKey;
 
     // Define token metadata
     const formData = new FormData();
-    formData.append("file", form.media); // Image file
+    formData.append("logo", form.tokenLogo); // Image file
+    formData.append("media", form.media); // Video file
     formData.append("name", form.name);
     formData.append("symbol", form.symbol);
     formData.append("description", form.description);
@@ -25,10 +20,11 @@ export async function generateCA(form: any) {
     formData.append("website", form.website);
     formData.append("showName", "true");
     formData.append("privateKey", privateKey);
+    formData.append("ca", form.ca);
     formData.append("initialBuyAmount", form.initialBuyAmount);
 
     // // Create IPFS metadata storage
-    // const metadataResponse = await axios.post('http://localhost:3000/createToken', formData);
-    // console.log("Metadata Response Json", metadataResponse);
+    const response = await axios.post('http://localhost:3000/createToken', formData);
+    console.log("Metadata Response Json", response);
 
 }
