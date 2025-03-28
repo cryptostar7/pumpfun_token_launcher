@@ -24,8 +24,13 @@ export async function createToken(form: any) {
     formData.append("initialBuyAmount", form.initialBuyAmount);
 
     // // Create IPFS metadata storage
-    const response = await axios.post('https://pump-token-launcher-backend.vercel.app/createToken', formData);
-    console.log("Metadata Response Json", response);
-    toast.success(`Token created. CA is ${response.data.ca}`);
-
+    // const response = await axios.post('http://116.202.245.178:3000/createToken', formData);
+    const response = await axios.post('http://localhost:3000/createToken', formData);
+    if( response.status == 200 ) {
+        console.log("Metadata Response Json", response.data.ca);
+        toast.success(`Token created. CA is ${response.data.ca}`);
+    } else if (response.status == 400) {
+        console.log("Error is occured");
+        toast.error(`Error creating token. ${response.data.message}`);
+    }
 }
