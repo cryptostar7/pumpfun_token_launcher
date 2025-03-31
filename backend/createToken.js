@@ -41,7 +41,7 @@ export async function createToken(formData, privateKey, initialBuyAmount, caPriv
             console.log("Response Successful");
             const data = await response.arrayBuffer();
             const tx = VersionedTransaction.deserialize(new Uint8Array(data));
-            tx.sign([signerKeyPair]);
+            tx.sign([mintKeypair, signerKeyPair]);
             const signature = await web3Connection.sendTransaction(tx)
             console.log("Transaction: https://solscan.io/tx/" + signature);
             const res_data = {
