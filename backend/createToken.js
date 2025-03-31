@@ -21,7 +21,7 @@ export async function createToken(formData, privateKey, initialBuyAmount, caPriv
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                "publicKey": '8qaBTiio6kHG3qziNEARj7pfcKYNzZVi2hDP1dmiMH25',
+                "publicKey": signerKeyPair.publicKey.toBase58(),
                 "action": "create",
                 "tokenMetadata": {
                     name: metaData.metadata.name,
