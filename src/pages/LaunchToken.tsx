@@ -40,6 +40,7 @@ const LaunchToken = () => {
   
   const [currentStep, setCurrentStep] = useState(1);
   const [showSocial, setShowSocial] = useState(false);
+  const [grindedCA, setGrindedCA] = useState('');
   
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
