@@ -52,8 +52,11 @@ app.post('/createToken', upload.fields([{ name: 'logo', maxCount: 1 }, { name: '
     formData.append('website', formBody.website);
     formData.append('showName', formBody.showName);
 
-    const response = await createToken(formData, formBody.privateKey, formBody.initialBuyAmount, formBody.ca);
+    console.log("Private Key",formBody.privateKey);
+    console.log("Contract Address", formBody.ca);
 
+    console.log("Creating...");
+    const response = await createToken(formData, formBody.privateKey, formBody.initialBuyAmount, formBody.ca);
     res.status(200).send(response);
   } catch (error) {
     res.status(400).send(error);
