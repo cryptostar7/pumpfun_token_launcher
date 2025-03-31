@@ -16,10 +16,16 @@ const corsOptions = {
 }
 app.use(cors(corsOptions));
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit: '20mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '20mb' }));
+
 const storage = multer.memoryStorage(); // Store files in memory  
-const upload = multer({ storage }); 
+const upload = multer({ 
+  storage,
+  limits: {   
+    fileSize: 20 * 1024 * 1024 // Set limit to 20MB (in bytes)  
+  }
+ }); 
 
 app.get('/test', (req, res) => {
   res.send('Hello World, Test!');
