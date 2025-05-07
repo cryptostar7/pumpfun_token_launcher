@@ -146,8 +146,7 @@ const Index = () => {
         <div className="container max-w-6xl mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center mb-4 md:mb-0">
-              <span className="bg-primary text-white w-8 h-8 rounded-full flex items-center justify-center mr-2">MG</span>
-              <span className="font-semibold">Minty Girl</span>
+              <span className="font-semibold">✨Demo Version Created by Nazar Kupchak.</span>
             </div>
             
             <div className="flex space-x-6">
@@ -157,7 +156,7 @@ const Index = () => {
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-border text-center text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} Minty Girl. All rights reserved.
+            &copy; {new Date().getFullYear()} All rights reserved.
           </div>
         </div>
       </footer>
